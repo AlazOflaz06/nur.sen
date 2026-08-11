@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nur.sys — System & Universe</title>
+  <style>
+    :root {
+      --bg-dark: #08060d;
+      --panel-bg: rgba(20, 14, 32, 0.75);
+      --accent-purple: #a855f7;
+      --glow-purple: #7e22ce;
+      --text-main: #f3f4f6;
+      --text-sub: #9ca3af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Fira Code', 'Segoe UI', Consolas, monospace;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Mor Matrix Arka Planı */
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.25;
+    }
+
+    /* Yan Menü (Sidebar Navigation) */
+    .sidebar {
+      width: 260px;
+      background: rgba(13, 10, 22, 0.9);
+      border-right: 1px solid rgba(168, 85, 247, 0.2);
+      backdrop-filter: blur(12px);
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: fixed;
+      height: 100vh;
+      z-index: 10;
+    }
+
+    .brand {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: var(--accent-purple);
+      text-shadow: 0 0 12px var(--glow-purple);
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .menu {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu-item {
+      padding: 12px 16px;
+      border-radius: 10px;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid transparent;
+    }
+
+    .menu-item:hover, .menu-item.active {
+      color: #fff;
+      background: rgba(168, 85, 247, 0.15);
+      border-color: rgba(168, 85, 247, 0.4);
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+    }
+
+    .sys-status {
+      font-size: 0.8rem;
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    /* Ana İçerik Alanı */
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      padding: 40px;
+      max-width: 1000px;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Kart Tasarımları */
+    .card {
+      background: var(--panel-bg);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 16px;
+      padding: 25px;
+      backdrop-filter: blur(10px);
+      margin-bottom: 25px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Profil Alanı */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .profile-img {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 2px solid var(--accent-purple);
+      box-shadow: 0 0 25px var(--glow-purple);
+      object-fit: cover;
+    }
+
+    /* Yetenek Barları (Skills) */
+    .skill-bar {
+      margin-bottom: 15px;
+    }
+
+    .skill-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+    }
+
+    .progress-bg {
+      background: rgba(255, 255, 255, 0.1);
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--glow-purple), var(--accent-purple));
+      border-radius: 4px;
+    }
+
+    /* Terminal Widget */
+    .terminal {
+      background: #05040a;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      font-family: monospace;
+      color: #34d399;
+      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    }
+
+    .terminal-header {
+      color: var(--text-sub);
+      font-size: 0.85rem;
+      border-bottom: 1px solid #1f1935;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .terminal-output {
+      min-height: 120px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .terminal-input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .terminal-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-family: monospace;
+      flex: 1;
+      font-size: 1rem;
+    }
+
+    /* Galeri Grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .gallery-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 20px var(--glow-purple);
+    }
+
+    .gallery-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(8, 6, 13, 0.85);
+      padding: 10px;
+      font-size: 0.85rem;
+      text-align: center;
+      color: var(--accent-purple);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid rgba(168,85,247,0.2); }
+      .main-content { margin-left: 0; padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Matrix Tuvali -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- SOL MENÜ -->
+  <aside class="sidebar">
+    <div>
+      <div class="brand">
+        <span>⚡ Nur.sys</span>
+      </div>
+      <ul class="menu">
+        <li class="menu-item active" onclick="switchTab('home', this)">
+          <span>🏠</span> // Ana Sayfa
+        </li>
+        <li class="menu-item" onclick="switchTab('about', this)">
+          <span>📊</span> // Sistem & Beceriler
+        </li>
+        <li class="menu-item" onclick="switchTab('gallery', this)">
+          <span>🖼️</span> // Galeri
+        </li>
+        <li class="menu-item" onclick="switchTab('terminal-tab', this)">
+          <span>💻</span> // Terminal & Sır
+        </li>
+      </ul>
+    </div>
+    <div class="sys-status">
+      <span class="status-dot"></span> System Online • v2.0
+    </div>
+  </aside>
+
+  <!-- SAĞ İÇERİK -->
+  <main class="main-content">
+
+    <!-- SEKME 1: ANA SAYFA -->
+    <section id="home" class="tab-content active">
+      <div class="card profile-header">
+        <!-- Nur'un Fotoğrafı Buraya -->
+        <img class="profile-img" src="https://via.placeholder.com/150/7e22ce/ffffff?text=NUR" alt="Nur">
+        <div>
+          <h1 style="color: var(--accent-purple); font-size: 2rem; margin-bottom: 5px;">Nur</h1>
+          <p style="color: var(--text-sub); font-size: 0.95rem; margin-bottom: 15px;">Bilişim Sistemleri & Dijital Evrenin Mimarı</p>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: #d1d5db;">
+            "Kodların arkasındaki estetik, bu sistemin kalbinde atan tek bir isim var."
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="color: var(--accent-purple); margin-bottom: 15px; font-size: 1.2rem;">🎵 Sistem Fon Müziği</h2>
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4cOdK2wGLETKBW3PvgPWqT?utm_source=generator&theme=0" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <!-- SEKME 2: HAKKINDA VE BECERİLER -->
+    <section id="about" class="tab-content">
+      <div class="card">
+        <h2 style="color: var(--accent-purple); margin-bottom: 20px;">⚙️ Nur.sys Sistem Özellikleri</h2>
+        
+        <div class="skill-bar">
+          <div class="skill-info">
+            <span>Problem Çözme & Bilişim Zekası</span>
+            <span>100%</span>
+          </div>
+          <div class="progress-bg"><div class="progress-fill" style="width: 100%;"></div></div>
+        </div>
+
+        <div class="skill-bar">
+          <div class="skill-info">
+            <span>Aura & Asillik (Neon Purple)</span>
+            <span>99.9%</span>
+          </div>
+          <div class="progress-bg"><div class="progress-fill" style="width: 99.9%;"></div></div>
+        </div>
+
+        <div class="skill-bar">
+          <div class="skill-info">
+            <span>Kahve Tüketim & Gece Çalışması</span>
+            <span>95%</span>
+          </div>
+          <div class="progress-bg"><div class="progress-fill" style="width: 95%;"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEKME 3: GALERİ -->
+    <section id="gallery" class="tab-content">
+      <div class="card">
+        <h2 style="color: var(--accent-purple); margin-bottom: 20px;">📸 Özel Kareler</h2>
+        <div class="gallery-grid">
+          
+          <div class="gallery-card">
+            <img src="https://via.placeholder.com/300x400/1e1035/a855f7?text=Nur+1" alt="Fotoğraf 1">
+            <div class="gallery-caption">// Frame_01.png</div>
+          </div>
+
+          <div class="gallery-card">
+            <img src="https://via.placeholder.com/300x400/1e1035/a855f7?text=Nur+2" alt="Fotoğraf 2">
+            <div class="gallery-caption">// Frame_02.png</div>
+          </div>
+
+          <div class="gallery-card">
+            <img src="https://via.placeholder.com/300x400/1e1035/a855f7?text=Nur+3" alt="Fotoğraf 3">
+            <div class="gallery-caption">// Frame_03.png</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SEKME 4: TERMINAL -->
+    <section id="terminal-tab" class="tab-content">
+      <div class="card">
+        <h2 style="color: var(--accent-purple); margin-bottom: 15px;">💻 Komut Satırı Konsolu</h2>
+        <p style="color: var(--text-sub); font-size: 0.85rem; margin-bottom: 15px;">Komutları görmek için <b>help</b> yazıp Enter'a bas.</p>
+        
+        <div class="terminal">
+          <div class="terminal-header">
+            <span>bash - nur@system:~</span>
+            <span>v2.0.26</span>
+          </div>
+          <div class="terminal-output" id="term-out">
+            Nur.sys Kabuğuna Hoş Geldin.<br>
+            Komut listesi için 'help' yazabilirsin.<br><br>
+          </div>
+          <div class="terminal-input-row">
+            <span style="color: var(--accent-purple);">$</span>
+            <input type="text" class="terminal-input" id="term-in" placeholder="komut yaz..." onkeydown="handleTerminal(event)">
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT KODLARI -->
+  <script>
+    // Matrix Arka Plan Efekti
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = 'NUR0101010101101SYS01';
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = Array.from({ length: columns }, () => 1);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(8, 6, 13, 0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#a855f7';
+      ctx.font = fontSize + 'px monospace';
+
+      drops.forEach((y, i) => {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, y * fontSize);
+        if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      });
+    }
+    setInterval(drawMatrix, 40);
+
+    // Menü Sekme Değiştirici
+    function switchTab(tabId, element) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(tabId).classList.add('active');
+      element.classList.add('active');
+    }
+
+    // Terminal Mantığı
+    function handleTerminal(e) {
+      if (e.key === 'Enter') {
+        const input = document.getElementById('term-in');
+        const output = document.getElementById('term-out');
+        const cmd = input.value.trim().toLowerCase();
+        
+        output.innerHTML += `<div style="color:#fff;">$ ${input.value}</div>`;
+
+        if (cmd === 'help') {
+          output.innerHTML += `Kullanılabilir komutlar:<br>
+          - <b style="color:#a855f7">nur</b> : Nur hakkında kısa bilgi<br>
+          - <b style="color:#a855f7">secret</b> : Gizli mesajı göster<br>
+          - <b style="color:#a855f7">clear</b> : Ekranı temizle<br>`;
+        } else if (cmd === 'nur') {
+          output.innerHTML += `<span style="color:#e0aaff;">[SYSTEM INFO] Nur: Bu sitenin ilham kaynağı ve en değerli parçası.</span><br>`;
+        } else if (cmd === 'secret') {
+          output.innerHTML += `<span style="color:#f43f5e;">💜 "Bilişim kodlardan ibaret olabilir ama bu site tamamen sana olan hislerle yazıldı."</span><br>`;
+        } else if (cmd === 'clear') {
+          output.innerHTML = '';
+        } else {
+          output.innerHTML += `<span style="color:#ef4444;">Komut bulunamadı: '${cmd}'. 'help' yazarak komutlara bakabilirsin.</span><br>`;
+        }
+
+        input.value = '';
+        output.scrollTop = output.scrollHeight;
+      }
+    }
+  </script>
+</body>
+</html>
