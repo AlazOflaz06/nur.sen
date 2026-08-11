@@ -38,6 +38,7 @@
       height: 100%;
       z-index: -1;
       opacity: 0.25;
+      transition: opacity 0.5s ease;
     }
 
     /* Yan Menü (Sidebar Navigation) */
@@ -204,8 +205,8 @@
     }
 
     .terminal-output {
-      min-height: 120px;
-      max-height: 200px;
+      min-height: 140px;
+      max-height: 250px;
       overflow-y: auto;
       margin-bottom: 10px;
       line-height: 1.5;
@@ -266,7 +267,7 @@
       color: var(--accent-purple);
     }
 
-    /* Responsive */
+    /* Responsive Yapı */
     @media (max-width: 768px) {
       body { flex-direction: column; }
       .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid rgba(168,85,247,0.2); }
@@ -276,10 +277,10 @@
 </head>
 <body>
 
-  <!-- Matrix Tuvali -->
+  <!-- Mor Matrix Arka Planı -->
   <canvas id="matrix-canvas"></canvas>
 
-  <!-- SOL MENÜ -->
+  <!-- SOL MENÜ (NAVIGASYON) -->
   <aside class="sidebar">
     <div>
       <div class="brand">
@@ -290,13 +291,13 @@
           <span>🏠</span> // Ana Sayfa
         </li>
         <li class="menu-item" onclick="switchTab('about', this)">
-          <span>📊</span> // Sistem & Beceriler
+          <span>📊</span> // Sistem Özellikleri
         </li>
         <li class="menu-item" onclick="switchTab('gallery', this)">
           <span>🖼️</span> // Galeri
         </li>
         <li class="menu-item" onclick="switchTab('terminal-tab', this)">
-          <span>💻</span> // Terminal & Sır
+          <span>💻</span> // Terminal Konsolu
         </li>
       </ul>
     </div>
@@ -305,14 +306,14 @@
     </div>
   </aside>
 
-  <!-- SAĞ İÇERİK -->
+  <!-- SAĞ İÇERİK ALANI -->
   <main class="main-content">
 
     <!-- SEKME 1: ANA SAYFA -->
     <section id="home" class="tab-content active">
       <div class="card profile-header">
-        <!-- Nur'un Fotoğrafı Buraya -->
-        <img class="profile-img" src="https://via.placeholder.com/150/7e22ce/ffffff?text=NUR" alt="Nur">
+        <!-- Nur'un Fotoğrafı (Dosya adını nur.jpg olarak değiştirebilirsin) -->
+        <img class="profile-img" src="nur.jpg" alt="Nur" onerror="this.src='https://via.placeholder.com/150/7e22ce/ffffff?text=NUR'">
         <div>
           <h1 style="color: var(--accent-purple); font-size: 2rem; margin-bottom: 5px;">Nur</h1>
           <p style="color: var(--text-sub); font-size: 0.95rem; margin-bottom: 15px;">Bilişim Sistemleri & Dijital Evrenin Mimarı</p>
@@ -331,11 +332,11 @@
     <!-- SEKME 2: HAKKINDA VE BECERİLER -->
     <section id="about" class="tab-content">
       <div class="card">
-        <h2 style="color: var(--accent-purple); margin-bottom: 20px;">⚙️ Nur.sys Sistem Özellikleri</h2>
+        <h2 style="color: var(--accent-purple); margin-bottom: 20px;">⚙️ Nur.sys Parametreleri</h2>
         
         <div class="skill-bar">
           <div class="skill-info">
-            <span>Problem Çözme & Bilişim Zekası</span>
+            <span>Problem Çözme & Algoritma Zekası</span>
             <span>100%</span>
           </div>
           <div class="progress-bg"><div class="progress-fill" style="width: 100%;"></div></div>
@@ -351,10 +352,10 @@
 
         <div class="skill-bar">
           <div class="skill-info">
-            <span>Kahve Tüketim & Gece Çalışması</span>
-            <span>95%</span>
+            <span>Siber Güvenlik & Sistem Hakimiyeti</span>
+            <span>98%</span>
           </div>
-          <div class="progress-bg"><div class="progress-fill" style="width: 95%;"></div></div>
+          <div class="progress-bg"><div class="progress-fill" style="width: 98%;"></div></div>
         </div>
       </div>
     </section>
@@ -366,17 +367,17 @@
         <div class="gallery-grid">
           
           <div class="gallery-card">
-            <img src="https://via.placeholder.com/300x400/1e1035/a855f7?text=Nur+1" alt="Fotoğraf 1">
+            <img src="resim1.jpg" alt="Fotoğraf 1" onerror="this.src='https://via.placeholder.com/300x400/1e1035/a855f7?text=Frame_01'">
             <div class="gallery-caption">// Frame_01.png</div>
           </div>
 
           <div class="gallery-card">
-            <img src="https://via.placeholder.com/300x400/1e1035/a855f7?text=Nur+2" alt="Fotoğraf 2">
+            <img src="resim2.jpg" alt="Fotoğraf 2" onerror="this.src='https://via.placeholder.com/300x400/1e1035/a855f7?text=Frame_02'">
             <div class="gallery-caption">// Frame_02.png</div>
           </div>
 
           <div class="gallery-card">
-            <img src="https://via.placeholder.com/300x400/1e1035/a855f7?text=Nur+3" alt="Fotoğraf 3">
+            <img src="resim3.jpg" alt="Fotoğraf 3" onerror="this.src='https://via.placeholder.com/300x400/1e1035/a855f7?text=Frame_03'">
             <div class="gallery-caption">// Frame_03.png</div>
           </div>
 
@@ -388,7 +389,7 @@
     <section id="terminal-tab" class="tab-content">
       <div class="card">
         <h2 style="color: var(--accent-purple); margin-bottom: 15px;">💻 Komut Satırı Konsolu</h2>
-        <p style="color: var(--text-sub); font-size: 0.85rem; margin-bottom: 15px;">Komutları görmek için <b>help</b> yazıp Enter'a bas.</p>
+        <p style="color: var(--text-sub); font-size: 0.85rem; margin-bottom: 15px;">Kullanabileceğin komutları görmek için <b>help</b> yazıp Enter'a bas.</p>
         
         <div class="terminal">
           <div class="terminal-header">
@@ -397,7 +398,7 @@
           </div>
           <div class="terminal-output" id="term-out">
             Nur.sys Kabuğuna Hoş Geldin.<br>
-            Komut listesi için 'help' yazabilirsin.<br><br>
+            Komut listesini görmek için 'help' yazabilirsin.<br><br>
           </div>
           <div class="terminal-input-row">
             <span style="color: var(--accent-purple);">$</span>
@@ -437,6 +438,11 @@
     }
     setInterval(drawMatrix, 40);
 
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
     // Menü Sekme Değiştirici
     function switchTab(tabId, element) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -446,27 +452,75 @@
       element.classList.add('active');
     }
 
-    // Terminal Mantığı
+    // Gelişmiş Terminal Mantığı
     function handleTerminal(e) {
       if (e.key === 'Enter') {
         const input = document.getElementById('term-in');
         const output = document.getElementById('term-out');
-        const cmd = input.value.trim().toLowerCase();
+        const val = input.value.trim();
+        const cmd = val.toLowerCase();
         
-        output.innerHTML += `<div style="color:#fff;">$ ${input.value}</div>`;
+        output.innerHTML += `<div style="color:#fff;">$ ${val}</div>`;
 
         if (cmd === 'help') {
           output.innerHTML += `Kullanılabilir komutlar:<br>
-          - <b style="color:#a855f7">nur</b> : Nur hakkında kısa bilgi<br>
-          - <b style="color:#a855f7">secret</b> : Gizli mesajı göster<br>
+          - <b style="color:#a855f7">nur</b> : Sistem yetkilisi bilgisi<br>
+          - <b style="color:#a855f7">sysinfo</b> : Sistem detayları (Neofetch)<br>
+          - <b style="color:#a855f7">hack</b> : Güvenlik taraması simülasyonu<br>
+          - <b style="color:#a855f7">run</b> : Algoritmayı derle ve çalıştır<br>
+          - <b style="color:#a855f7">ping</b> : Bağlantı durumunu test et<br>
+          - <b style="color:#a855f7">matrix</b> : Tam ekran Matrix akışını başlat<br>
+          - <b style="color:#a855f7">secret</b> : Kilitli nota eriş<br>
           - <b style="color:#a855f7">clear</b> : Ekranı temizle<br>`;
-        } else if (cmd === 'nur') {
-          output.innerHTML += `<span style="color:#e0aaff;">[SYSTEM INFO] Nur: Bu sitenin ilham kaynağı ve en değerli parçası.</span><br>`;
-        } else if (cmd === 'secret') {
-          output.innerHTML += `<span style="color:#f43f5e;">💜 "Bilişim kodlardan ibaret olabilir ama bu site tamamen sana olan hislerle yazıldı."</span><br>`;
-        } else if (cmd === 'clear') {
+        } 
+        else if (cmd === 'sysinfo') {
+          output.innerHTML += `<pre style="color:#c084fc; font-size:0.8rem; line-height:1.2;">
+   .---.      OS: NurOS v2.0 x86_64
+  /     \\     Kernel: Pure-Elegance-6.1
+ |  NUR  |    Uptime: 24/7 Unlimited
+  \\     /     CPU: Genius Mind @ 5.0GHz
+   '---'      Status: System Admin / Top Tier
+          </pre>`;
+        }
+        else if (cmd === 'hack') {
+          output.innerHTML += `<span style="color:#34d399;">
+          [+] Target: System Core...<br>
+          [+] Bypassing Firewall... OK<br>
+          [+] Decrypting Security Hash...<br>
+          <b style="color:#a855f7">[ACCESS GRANTED] System Admin: Nur</b>
+          </span><br>`;
+        }
+        else if (cmd === 'run') {
+          output.innerHTML += `<span style="color:#60a5fa;">
+          [1/3] Compiling nur_core.cpp...<br>
+          [2/3] Linking modules...<br>
+          [3/3] Execution Successful!<br>
+          <b>Output: "Kusursuz Algoritma"</b>
+          </span><br>`;
+        }
+        else if (cmd === 'ping') {
+          output.innerHTML += `<span style="color:#a855f7;">
+          Reply from Nur.sys: time=0.1ms bytes=64 TTL=128<br>
+          Status: Connection Strong 💜
+          </span><br>`;
+        }
+        else if (cmd.startsWith('sudo')) {
+          output.innerHTML += `<span style="color:#ef4444;">[SUDO WARNING] Access Denied: 'Nur' sisteminde kök erişim yetkisi sadece ona aittir!</span><br>`;
+        }
+        else if (cmd === 'matrix') {
+          output.innerHTML += `<span style="color:#34d399;">[+] Matrix modu başlatılıyor...</span><br>`;
+          document.getElementById('matrix-canvas').style.opacity = '0.85';
+          setTimeout(() => {
+            document.getElementById('matrix-canvas').style.opacity = '0.25';
+          }, 4000);
+        }
+        else if (cmd === 'secret') {
+          output.innerHTML += `<span style="color:#f43f5e;">💜 "Kod satırları biter ama sana özel tasarlanan bu evren hep çalışır."</span><br>`;
+        }
+        else if (cmd === 'clear') {
           output.innerHTML = '';
-        } else {
+        } 
+        else {
           output.innerHTML += `<span style="color:#ef4444;">Komut bulunamadı: '${cmd}'. 'help' yazarak komutlara bakabilirsin.</span><br>`;
         }
 
