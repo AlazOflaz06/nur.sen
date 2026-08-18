@@ -12,13 +12,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnElement = document.getElementById(btnId);
     if (btnElement) {
       btnElement.addEventListener('click', () => {
+        // Tüm sekmeleri gizle
         document.querySelectorAll('.tab-content').forEach(tab => {
           tab.classList.remove('active');
         });
+        // Tüm butonların aktifliğini kaldır
         document.querySelectorAll('.menu-item').forEach(item => {
           item.classList.remove('active');
         });
 
+        // Hedef sekmeyi ve tıklanan butonu aktif yap
         const targetTabId = menuButtons[btnId];
         const targetTab = document.getElementById(targetTabId);
         if (targetTab) {
@@ -29,24 +32,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 2. YOUTUBE FON MÜZİĞİ KONTROLÜ
-  const ytPlayer = document.getElementById('youtube-player');
+  // 2. REKLAMSIZ MÜZİK OYNATMA MOTORU
+  const music = document.getElementById('bg-music');
   const musicBtn = document.getElementById('music-btn');
-  let isPlaying = true;
 
-  if (musicBtn && ytPlayer) {
-    musicBtn.addEventListener('click', () => {
-      if (isPlaying) {
-        ytPlayer.src = ""; // Sesi kapatır
-        musicBtn.innerText = "▶️ Müziği Başlat";
-        isPlaying = false;
-      } else {
-        ytPlayer.src = "https://www.youtube.com/embed/vs_XGW7xkgY?enablejsapi=1&autoplay=1&loop=1&playlist=vs_XGW7xkgY"; // Sesi tekrar açar
-        musicBtn.innerText = "⏸️ Müziği Durdur";
-        isPlaying = true;
-      }
-    });
+  function toggleMusic() {
+    if (!music) return;
+
+    if (music.paused) {
+      music.play().then(() => {
+        if (musicBtn) musicBtn.innerText = "⏸️ Müziği Durdur";
+      }).catch(err => {
+        console.log("Ses başlatılamadı:", err);
+      });
+    } else {
+      music.pause();
+      if (musicBtn) musicBtn.innerText = "▶️ Müziği Başlat";
+    }
   }
+
+  if (musicBtn) {
+    musicBtn.addEventListener('click', toggleMusic);
+  }
+
+  // Mobil cihazlarda/tarayıcılarda ekrana yapılan ilk dokunuşta sesi açar
+  document.addEventListener('click', function autoPlayOnce() {
+    if (music && music.paused) {
+      music.play().then(() => {
+        if (musicBtn) musicBtn.innerText = "⏸️ Müziği Durdur";
+      }).catch(() => {});
+    }
+    document.removeEventListener('click', autoPlayOnce);
+  });
 
   // 3. MATRIX ARKA PLAN EFEKTİ
   const canvas = document.getElementById('matrix-canvas');
@@ -81,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. CANLI METRİK SİMÜLATÖRÜ
+  // 4. CANLI UPTIME VE METRİK SİMÜLATÖRÜ
   let seconds = 0;
   setInterval(() => {
     seconds++;
@@ -133,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         else if (cmd === 'sysinfo') {
           termOutput.innerHTML += `<pre style="color:#c084fc; font-size:0.8rem; line-height:1.2;">
- .---.      OS: NurOS v4.1 x86_64
+ .---.      OS: NurOS v4.2 x86_64
 /     \\     Kernel: Pure-Elegance-6.1
 |  NUR  |    Uptime: ${seconds}s
 \\     /     CPU: Genius Mind @ 5.0GHz
