@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NurOS v4.2 — Cyber Architecture</title>
+  <title>NurOS v4.3 — Cyber Architecture</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,16 +11,15 @@
   <!-- Matrix Arka Plan Canvas -->
   <canvas id="matrix-canvas"></canvas>
 
-  <!-- Müzik Motoru (Reklamsız Direct MP3) -->
-  <audio id="bg-music" loop>
-    <!-- Buraya direkt mp3 linki veya klasördeki dosya adını yaz -->
-    <source src="https://files.catbox.moe/8y2x7n.mp3" type="audio/mpeg">
+  <!-- Müzik Motoru (Kendi GitHub Depondaki Dosya) -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="sarki.mp3" type="audio/mpeg">
   </audio>
 
   <!-- SOL MENÜ -->
   <aside class="sidebar">
     <div>
-      <div class="brand">⚡ NurOS v4.2</div>
+      <div class="brand">⚡ NurOS v4.3</div>
       <ul class="menu">
         <li class="menu-item active" id="btn-home"><span>🏠</span> // System Core</li>
         <li class="menu-item" id="btn-skills"><span>📊</span> // Dev Stack</li>
@@ -80,7 +79,7 @@
           <div style="font-size: 2.2rem;">🎙️</div>
           <div style="flex: 1;">
             <div style="font-weight: bold; color: #fff;">Ayaşlı Rafet — Paşa Torunu</div>
-            <div style="color: var(--text-sub); font-size: 0.85rem;">Sistem Özel Ses Akışı</div>
+            <div style="color: var(--text-sub); font-size: 0.85rem;">Yerel Sistem Ses Dosyası (sarki.mp3)</div>
           </div>
           <button class="btn-audio" id="music-btn">▶️ Müziği Başlat</button>
         </div>
@@ -132,9 +131,13 @@
     <div id="tab-terminal" class="tab-content">
       <div class="card">
         <h2 class="card-title">💻 Interaktif Terminal Lab</h2>
+        <p style="color: var(--text-sub); font-size: 0.85rem; margin-bottom: 12px;">Komut listesini görmek için <b style="color: var(--accent-purple);">help</b> yazıp Enter'a bas.</p>
         <div class="terminal">
           <div class="terminal-header"><span>bash - nur@NurOS:~</span></div>
-          <div class="terminal-output" id="term-out">NurOS Kabuğuna Hoş Geldin.<br><br></div>
+          <div class="terminal-output" id="term-out">
+            NurOS Kabuğuna Hoş Geldin.<br>
+            Kullanılabilir komutları görmek için <b>help</b> yazabilirsin.<br><br>
+          </div>
           <div class="terminal-input-row">
             <span>$</span>
             <input type="text" class="terminal-input" id="term-in" placeholder="komut yaz..." autocomplete="off">
