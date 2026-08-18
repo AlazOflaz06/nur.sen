@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NurOS v3.5 — System Architecture & Cyber Universe</title>
+  <title>NurOS v3.6 — System Architecture & Cyber Universe</title>
   <style>
     :root {
       --bg-dark: #05030a;
@@ -143,7 +143,7 @@
     }
 
     .tab-content.active {
-      display: block;
+      display: block !important;
     }
 
     @keyframes tabSlide {
@@ -254,7 +254,7 @@
       box-shadow: 0 0 10px var(--glow-purple);
     }
 
-    /* GitHub Activity Heatmap Simülasyonu */
+    /* GitHub Activity Heatmap */
     .heatmap {
       display: flex;
       gap: 5px;
@@ -426,7 +426,7 @@
       box-shadow: 0 0 50px var(--glow-purple);
     }
 
-    /* Müzik Çalar Özel Kartı */
+    /* Müzik Çalar Kartı */
     .player-card {
       display: flex;
       align-items: center;
@@ -436,6 +436,19 @@
       border-radius: 14px;
       border: 1px solid rgba(192, 132, 252, 0.3);
     }
+
+    .btn-audio {
+      background: linear-gradient(135deg, var(--glow-purple), var(--deep-purple));
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(147, 51, 234, 0.4);
+    }
+    .btn-audio:hover { transform: scale(1.05); }
 
     @media (max-width: 768px) {
       body { flex-direction: column; }
@@ -450,6 +463,12 @@
   <!-- Matrix Canvas -->
   <canvas id="matrix-canvas"></canvas>
 
+  <!-- Gizli Arka Plan Müzik Motoru -->
+  <audio id="bg-music" loop preload="auto">
+    <!-- Ayaşlı Rafet - Paşa Torunu Ses Kaynağı -->
+    <source src="https://ia801503.us.archive.org/15/items/ayasli-rafet-pasa-torunu/Ayasli_Rafet_Pasa_Torunu.mp3" type="audio/mpeg">
+  </audio>
+
   <!-- Lightbox Modal -->
   <div class="modal" id="img-modal" onclick="closeModal()">
     <img class="modal-img" id="modal-target" src="" alt="Zoom">
@@ -459,7 +478,7 @@
   <aside class="sidebar">
     <div>
       <div class="brand">
-        <span>⚡ NurOS v3.5</span>
+        <span>⚡ NurOS v3.6</span>
       </div>
       <ul class="menu">
         <li class="menu-item active" onclick="switchTab('home', this)">
@@ -529,14 +548,14 @@
 
       <!-- Müzik Çalar Kartı (Ayaşlı Rafet - Paşa Torunu) -->
       <div class="card">
-        <h2 style="color: var(--accent-purple); margin-bottom: 15px; font-size: 1.1rem;">🎵 Özel Parça Seçimi</h2>
+        <h2 style="color: var(--accent-purple); margin-bottom: 15px; font-size: 1.1rem;">🎵 Fon Müziği Kontrolü</h2>
         <div class="player-card">
           <div style="font-size: 2.2rem;">🎙️</div>
           <div style="flex: 1;">
             <div style="font-weight: bold; color: #fff; font-size: 1.05rem;">Ayaşlı Rafet — Paşa Torunu</div>
             <div style="color: var(--text-sub); font-size: 0.85rem; margin-top: 4px;">Sistem Özel Medya Çalma Listesi</div>
           </div>
-          <a href="https://www.youtube.com/results?search_query=Aya%C5%9Fl%C4%B1+Rafet+-+Pa%C5%9Fa+Torunu" target="_blank" style="background: linear-gradient(135deg, var(--glow-purple), var(--deep-purple)); color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: bold;">▶ Dinle</a>
+          <button class="btn-audio" id="music-btn" onclick="toggleAudio()">▶️ Müziği Oynat / Durdur</button>
         </div>
       </div>
     </section>
@@ -629,13 +648,4 @@ print(sys.execute())
           </div>
 
         </div>
-      </div>
-    </section>
-
-    <!-- TAB 4: TERMINAL -->
-    <section id="terminal-tab" class="tab-content">
-      <div class="card">
-        <h2 style="color: var(--accent-purple); margin-bottom: 12px;">💻 Interaktif Terminal Lab</h2>
-        <p style="color: var(--text-sub); font-size: 0.85rem; margin-bottom: 15px;">Komut listesini görmek için <b style="color: var(--accent-purple);">help</b> yazıp Enter'a bas.</p>
-        
-        
+      <
