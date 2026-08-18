@@ -3,568 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NurOS v3.6 — System Architecture & Cyber Universe</title>
-  <style>
-    :root {
-      --bg-dark: #05030a;
-      --panel-bg: rgba(18, 11, 31, 0.85);
-      --accent-purple: #c084fc;
-      --glow-purple: #9333ea;
-      --deep-purple: #581c87;
-      --text-main: #f3f4f6;
-      --text-sub: #9ca3af;
-      --terminal-green: #34d399;
-      --neon-pink: #f43f5e;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Fira Code', Consolas, 'Courier New', monospace;
-      user-select: none;
-    }
-
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      display: flex;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* Matrix Arka Plan */
-    #matrix-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      opacity: 0.22;
-      transition: opacity 0.5s ease;
-    }
-
-    /* Yan Menü (Sidebar) */
-    .sidebar {
-      width: 280px;
-      background: rgba(10, 6, 18, 0.95);
-      border-right: 1px solid rgba(192, 132, 252, 0.25);
-      backdrop-filter: blur(16px);
-      padding: 30px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: fixed;
-      height: 100vh;
-      z-index: 100;
-    }
-
-    .brand {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--accent-purple);
-      text-shadow: 0 0 15px var(--glow-purple);
-      margin-bottom: 35px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .menu {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .menu-item {
-      padding: 14px 18px;
-      border-radius: 12px;
-      color: var(--text-sub);
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border: 1px solid transparent;
-      font-size: 0.9rem;
-    }
-
-    .menu-item:hover, .menu-item.active {
-      color: #fff;
-      background: rgba(192, 132, 252, 0.15);
-      border-color: rgba(192, 132, 252, 0.4);
-      box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
-      transform: translateX(5px);
-    }
-
-    .sys-status-box {
-      background: rgba(20, 13, 38, 0.6);
-      padding: 15px;
-      border-radius: 10px;
-      border: 1px solid rgba(192, 132, 252, 0.15);
-      font-size: 0.78rem;
-    }
-
-    .sys-status {
-      color: var(--terminal-green);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background-color: var(--terminal-green);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--terminal-green);
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.8); }
-    }
-
-    /* Ana İçerik */
-    .main-content {
-      margin-left: 280px;
-      flex: 1;
-      padding: 40px;
-      max-width: 1100px;
-    }
-
-    .tab-content {
-      display: none;
-      animation: tabSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .tab-content.active {
-      display: block !important;
-    }
-
-    @keyframes tabSlide {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Kart Yapıları */
-    .card {
-      background: var(--panel-bg);
-      border: 1px solid rgba(192, 132, 252, 0.2);
-      border-radius: 18px;
-      padding: 28px;
-      backdrop-filter: blur(12px);
-      margin-bottom: 25px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
-    }
-
-    /* Profile Header */
-    .profile-header {
-      display: flex;
-      align-items: center;
-      gap: 30px;
-    }
-
-    .profile-img-wrap {
-      position: relative;
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      padding: 5px;
-      background: linear-gradient(135deg, var(--accent-purple), var(--deep-purple));
-      box-shadow: 0 0 30px var(--glow-purple);
-      flex-shrink: 0;
-    }
-
-    .profile-img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      background: #110c21;
-    }
-
-    /* System Metrics Dashboard */
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .metric-card {
-      background: rgba(10, 6, 18, 0.6);
-      border: 1px solid rgba(192, 132, 252, 0.15);
-      padding: 15px;
-      border-radius: 12px;
-      text-align: center;
-    }
-
-    .metric-val {
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: var(--accent-purple);
-      margin-top: 5px;
-    }
-
-    /* Skill Grid & Badges */
-    .skill-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .skill-badge {
-      background: rgba(147, 51, 234, 0.1);
-      border: 1px solid rgba(192, 132, 252, 0.3);
-      padding: 12px 16px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.88rem;
-    }
-
-    .progress-bg {
-      background: rgba(255, 255, 255, 0.08);
-      height: 8px;
-      border-radius: 4px;
-      overflow: hidden;
-      margin-top: 6px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--deep-purple), var(--accent-purple));
-      border-radius: 4px;
-      box-shadow: 0 0 10px var(--glow-purple);
-    }
-
-    /* GitHub Activity Heatmap */
-    .heatmap {
-      display: flex;
-      gap: 5px;
-      margin-top: 15px;
-      overflow-x: auto;
-      padding-bottom: 5px;
-    }
-
-    .heatmap-col {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .heatmap-box {
-      width: 12px;
-      height: 12px;
-      border-radius: 2px;
-      background: rgba(192, 132, 252, 0.1);
-    }
-    .heatmap-box.lvl-1 { background: rgba(147, 51, 234, 0.4); }
-    .heatmap-box.lvl-2 { background: rgba(192, 132, 252, 0.7); }
-    .heatmap-box.lvl-3 { background: #c084fc; box-shadow: 0 0 6px #c084fc; }
-
-    /* Interactive Code Editor */
-    .editor-container {
-      background: #080511;
-      border: 1px solid rgba(192, 132, 252, 0.3);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .editor-header {
-      background: rgba(18, 11, 31, 0.9);
-      padding: 10px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(192, 132, 252, 0.2);
-      font-size: 0.82rem;
-      color: var(--text-sub);
-    }
-
-    .editor-body {
-      padding: 18px;
-      color: #e2e8f0;
-      font-family: monospace;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      white-space: pre-wrap;
-    }
-
-    .btn-run {
-      background: linear-gradient(135deg, var(--glow-purple), var(--deep-purple));
-      color: white;
-      border: none;
-      padding: 8px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: opacity 0.2s;
-    }
-    .btn-run:hover { opacity: 0.88; }
-
-    /* Terminal */
-    .terminal {
-      background: #040208;
-      border: 1px solid rgba(192, 132, 252, 0.35);
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 0 35px rgba(0, 0, 0, 0.9);
-    }
-
-    .terminal-header {
-      color: var(--text-sub);
-      font-size: 0.82rem;
-      border-bottom: 1px solid #1a122e;
-      padding-bottom: 10px;
-      margin-bottom: 15px;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .terminal-output {
-      min-height: 220px;
-      max-height: 380px;
-      overflow-y: auto;
-      margin-bottom: 12px;
-      line-height: 1.6;
-      font-size: 0.92rem;
-    }
-
-    .terminal-input-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      background: rgba(20, 13, 38, 0.5);
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid rgba(192, 132, 252, 0.2);
-    }
-
-    .terminal-input {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: #fff;
-      font-family: monospace;
-      flex: 1;
-      font-size: 0.95rem;
-    }
-
-    /* Galeri Grid */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 22px;
-    }
-
-    .gallery-card {
-      position: relative;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid rgba(192, 132, 252, 0.3);
-      background: rgba(10, 6, 18, 0.8);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .gallery-card:hover {
-      transform: translateY(-6px) scale(1.02);
-      box-shadow: 0 10px 25px var(--glow-purple);
-      border-color: var(--accent-purple);
-    }
-
-    .gallery-card img {
-      width: 100%;
-      height: 240px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .gallery-caption {
-      padding: 12px;
-      background: rgba(8, 5, 15, 0.9);
-      font-size: 0.82rem;
-      text-align: center;
-      color: var(--accent-purple);
-      border-top: 1px solid rgba(192, 132, 252, 0.15);
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(4, 2, 8, 0.92);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(10px);
-    }
-
-    .modal-img {
-      max-width: 85%;
-      max-height: 85vh;
-      border-radius: 12px;
-      border: 2px solid var(--accent-purple);
-      box-shadow: 0 0 50px var(--glow-purple);
-    }
-
-    /* Müzik Çalar Kartı */
-    .player-card {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      background: rgba(10, 6, 18, 0.8);
-      padding: 18px;
-      border-radius: 14px;
-      border: 1px solid rgba(192, 132, 252, 0.3);
-    }
-
-    .btn-audio {
-      background: linear-gradient(135deg, var(--glow-purple), var(--deep-purple));
-      color: white;
-      padding: 10px 20px;
-      border-radius: 10px;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 15px rgba(147, 51, 234, 0.4);
-    }
-    .btn-audio:hover { transform: scale(1.05); }
-
-    @media (max-width: 768px) {
-      body { flex-direction: column; }
-      .sidebar { width: 100%; height: auto; position: relative; border-right: none; }
-      .main-content { margin-left: 0; padding: 20px; }
-      .profile-header { flex-direction: column; text-align: center; }
-    }
-  </style>
+  <title>NurOS v4.0 — Cyber Architecture</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Matrix Canvas -->
+  <!-- Matrix Arka Plan Canvas -->
   <canvas id="matrix-canvas"></canvas>
 
-  <!-- Gizli Arka Plan Müzik Motoru -->
-  <audio id="bg-music" loop preload="auto">
-    <!-- Ayaşlı Rafet - Paşa Torunu Ses Kaynağı -->
-    <source src="https://ia801503.us.archive.org/15/items/ayasli-rafet-pasa-torunu/Ayasli_Rafet_Pasa_Torunu.mp3" type="audio/mpeg">
+  <!-- Müzik Elemanı (Yerel Dosyadan Okur) -->
+  <audio id="bg-music" loop>
+    <source src="sarkı.mp3" type="audio/mpeg">
   </audio>
-
-  <!-- Lightbox Modal -->
-  <div class="modal" id="img-modal" onclick="closeModal()">
-    <img class="modal-img" id="modal-target" src="" alt="Zoom">
-  </div>
 
   <!-- SOL MENÜ -->
   <aside class="sidebar">
     <div>
-      <div class="brand">
-        <span>⚡ NurOS v3.6</span>
-      </div>
+      <div class="brand">⚡ NurOS v4.0</div>
       <ul class="menu">
-        <li class="menu-item active" onclick="switchTab('home', this)">
-          <span>🏠</span> // System Core
-        </li>
-        <li class="menu-item" onclick="switchTab('skills', this)">
-          <span>📊</span> // Dev Stack & Code
-        </li>
-        <li class="menu-item" onclick="switchTab('gallery', this)">
-          <span>🖼️</span> // Data Vault (Galeri)
-        </li>
-        <li class="menu-item" onclick="switchTab('terminal-tab', this)">
-          <span>💻</span> // Terminal Lab
-        </li>
+        <li class="menu-item active" id="btn-home">🏠 // System Core</li>
+        <li class="menu-item" id="btn-skills">📊 // Dev Stack & Code</li>
+        <li class="menu-item" id="btn-gallery">🖼️ // Data Vault (Galeri)</li>
+        <li class="menu-item" id="btn-terminal">💻 // Terminal Lab</li>
       </ul>
     </div>
 
     <div class="sys-status-box">
-      <div class="sys-status">
-        <span class="status-dot"></span> Kernel: Active
-      </div>
-      <div style="color: var(--text-sub); margin-top: 4px;">Uptime: <span id="uptime-counter" style="color: #fff;">0s</span></div>
-      <div style="color: var(--text-sub); margin-top: 2px;">User: <span style="color: var(--accent-purple);">Nur@Admin</span></div>
+      <div class="status-online">● System Active</div>
+      <div>Uptime: <span id="uptime-counter">0s</span></div>
+      <div>User: <span style="color: var(--accent-purple);">Nur@Admin</span></div>
     </div>
   </aside>
 
-  <!-- SAĞ İÇERİK ALANI -->
+  <!-- SAĞ İÇERİK BÖLÜMÜ -->
   <main class="main-content">
 
-    <!-- TAB 1: HOME -->
-    <section id="home" class="tab-content active">
+    <!-- SEKME 1: HOME -->
+    <div id="tab-home" class="tab-content active">
       <div class="card profile-header">
         <div class="profile-img-wrap">
           <img class="profile-img" src="nur.jpg" alt="Nur" onerror="this.src='https://via.placeholder.com/150/581c87/c084fc?text=NUR'">
         </div>
         <div>
-          <h1 style="color: var(--accent-purple); font-size: 2.2rem; margin-bottom: 6px;">System Administrator: Nur</h1>
-          <p style="color: var(--text-sub); font-size: 0.95rem; margin-bottom: 16px;">Computer Science Student • Cybersecurity & Software Architecture</p>
-          <p style="font-size: 0.92rem; line-height: 1.7; color: #d1d5db; background: rgba(147, 51, 234, 0.08); padding: 12px; border-radius: 8px; border-left: 3px solid var(--accent-purple);">
+          <h1 class="title">System Administrator: Nur</h1>
+          <p class="subtitle">Computer Science Student • Cybersecurity & Architecture</p>
+          <p class="quote-box">
             "Karmaşık kodların ardındaki kusursuz estetik; bu özel sistemin tüm altyapısı senin ilhamınla inşa edildi."
           </p>
         </div>
       </div>
 
-      <!-- Canlı Sistem Göstergeleri -->
       <div class="card">
-        <h2 style="color: var(--accent-purple); margin-bottom: 15px; font-size: 1.1rem;">⚡ Canlı Sistem Metrikleri</h2>
+        <h2 class="card-title">⚡ Canlı Sistem Metrikleri</h2>
         <div class="metrics-grid">
           <div class="metric-card">
-            <div style="color: var(--text-sub); font-size: 0.8rem;">CPU Load</div>
+            <div class="metric-label">CPU Load</div>
             <div class="metric-val" id="cpu-val">12%</div>
           </div>
           <div class="metric-card">
-            <div style="color: var(--text-sub); font-size: 0.8rem;">Memory Allocated</div>
+            <div class="metric-label">Memory Allocated</div>
             <div class="metric-val">16 GB / OK</div>
           </div>
           <div class="metric-card">
-            <div style="color: var(--text-sub); font-size: 0.8rem;">Network Latency</div>
+            <div class="metric-label">Network Latency</div>
             <div class="metric-val" style="color: var(--terminal-green);">0.1 ms</div>
           </div>
           <div class="metric-card">
-            <div style="color: var(--text-sub); font-size: 0.8rem;">Aura Level</div>
+            <div class="metric-label">Aura Level</div>
             <div class="metric-val" style="color: #f43f5e;">MAX</div>
           </div>
         </div>
       </div>
 
-      <!-- Müzik Çalar Kartı (Ayaşlı Rafet - Paşa Torunu) -->
       <div class="card">
-        <h2 style="color: var(--accent-purple); margin-bottom: 15px; font-size: 1.1rem;">🎵 Fon Müziği Kontrolü</h2>
+        <h2 class="card-title">🎵 Özel Fon Müziği</h2>
         <div class="player-card">
           <div style="font-size: 2.2rem;">🎙️</div>
           <div style="flex: 1;">
-            <div style="font-weight: bold; color: #fff; font-size: 1.05rem;">Ayaşlı Rafet — Paşa Torunu</div>
-            <div style="color: var(--text-sub); font-size: 0.85rem; margin-top: 4px;">Sistem Özel Medya Çalma Listesi</div>
+            <div style="font-weight: bold; color: #fff;">Ayaşlı Rafet — Paşa Torunu</div>
+            <div style="color: var(--text-sub); font-size: 0.85rem;">Sistem Özel Medya Çalma Listesi</div>
           </div>
-          <button class="btn-audio" id="music-btn" onclick="toggleAudio()">▶️ Müziği Oynat / Durdur</button>
+          <button class="btn-audio" id="music-btn">▶️ Müziği Başlat / Durdur</button>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- TAB 2: SKILLS & CODE -->
-    <section id="skills" class="tab-content">
+    <!-- SEKME 2: SKILLS -->
+    <div id="tab-skills" class="tab-content">
       <div class="card">
-        <h2 style="color: var(--accent-purple); margin-bottom: 20px;">⚙️ Dev Stack & Yetenek Barları</h2>
-        
+        <h2 class="card-title">⚙️ Dev Stack & Yetenek Barları</h2>
         <div class="skill-grid">
           <div class="skill-badge"><span>🐍</span> Python / Algoritma Mimarisi</div>
           <div class="skill-badge"><span>🛡️</span> Siber Güvenlik & Ağ Analizi</div>
@@ -573,38 +100,27 @@
         </div>
 
         <div style="margin-top: 25px;">
-          <div style="margin-bottom: 14px;">
-            <div style="display:flex; justify-content:space-between; font-size: 0.88rem;">
-              <span>Problem Çözme & Algoritma Hakimiyeti</span><span>100%</span>
-            </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-info"><span>Problem Çözme & Algoritma Hakimiyeti</span><span>100%</span></div>
             <div class="progress-bg"><div class="progress-fill" style="width: 100%;"></div></div>
           </div>
-          <div style="margin-bottom: 14px;">
-            <div style="display:flex; justify-content:space-between; font-size: 0.88rem;">
-              <span>Cyber Security & Threat Analysis</span><span>98%</span>
-            </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-info"><span>Cyber Security & Threat Analysis</span><span>98%</span></div>
             <div class="progress-bg"><div class="progress-fill" style="width: 98%;"></div></div>
           </div>
-          <div style="margin-bottom: 14px;">
-            <div style="display:flex; justify-content:space-between; font-size: 0.88rem;">
-              <span>Asillik & Aura Status (Neon Purple)</span><span>99.9%</span>
-            </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-info"><span>Asillik & Aura Status (Neon Purple)</span><span>99.9%</span></div>
             <div class="progress-bg"><div class="progress-fill" style="width: 99.9%;"></div></div>
           </div>
         </div>
-
-        <!-- Heatmap Aktivite Grafiği -->
-        <h3 style="color: var(--accent-purple); font-size: 0.95rem; margin-top: 25px;">🟩 Yıllık Kodlama Aktivite Haritası (Commit Activity)</h3>
-        <div class="heatmap" id="heatmap-target"></div>
       </div>
 
-      <!-- Live Code Sandbox -->
       <div class="card">
-        <h2 style="color: var(--accent-purple); margin-bottom: 15px;">💻 Live Code Sandbox (nur_core.py)</h2>
+        <h2 class="card-title">💻 Live Code Sandbox (nur_core.py)</h2>
         <div class="editor-container">
           <div class="editor-header">
             <span>script: nur_core.py</span>
-            <button class="btn-run" onclick="runSandboxCode()">▶️ Kodu Derle & Çalıştır</button>
+            <button class="btn-run" id="btn-run-code">▶️ Kodu Derle & Çalıştır</button>
           </div>
           <div class="editor-body">
 <span style="color:#c084fc;">import</span> system_core
@@ -621,31 +137,57 @@
 sys = NurSystem()
 print(sys.execute())
           </div>
-          <div id="sandbox-out" style="padding: 12px; background: #020105; color: var(--terminal-green); border-top: 1px solid rgba(192,132,252,0.2); font-size: 0.85rem; display: none;"></div>
+          <div id="sandbox-out"></div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- TAB 3: GALLERY -->
-    <section id="gallery" class="tab-content">
+    <!-- SEKME 3: GALLERY -->
+    <div id="tab-gallery" class="tab-content">
       <div class="card">
-        <h2 style="color: var(--accent-purple); margin-bottom: 20px;">🖼️ Data Vault (Sistem Dosyaları)</h2>
+        <h2 class="card-title">🖼️ Data Vault (Sistem Dosyaları)</h2>
         <div class="gallery-grid">
-          
-          <div class="gallery-card" onclick="openModal('resim1.jpg')">
+          <div class="gallery-card">
             <img src="resim1.jpg" alt="1" onerror="this.src='https://via.placeholder.com/300x400/581c87/c084fc?text=Frame_01.raw'">
-            <div class="gallery-caption">// Frame_01.raw [Tıkla & Büyüt]</div>
+            <div class="gallery-caption">// Frame_01.raw</div>
           </div>
-
-          <div class="gallery-card" onclick="openModal('resim2.jpg')">
+          <div class="gallery-card">
             <img src="resim2.jpg" alt="2" onerror="this.src='https://via.placeholder.com/300x400/581c87/c084fc?text=Frame_02.raw'">
-            <div class="gallery-caption">// Frame_02.raw [Tıkla & Büyüt]</div>
+            <div class="gallery-caption">// Frame_02.raw</div>
           </div>
-
-          <div class="gallery-card" onclick="openModal('resim3.jpg')">
+          <div class="gallery-card">
             <img src="resim3.jpg" alt="3" onerror="this.src='https://via.placeholder.com/300x400/581c87/c084fc?text=Frame_03.raw'">
-            <div class="gallery-caption">// Frame_03.raw [Tıkla & Büyüt]</div>
+            <div class="gallery-caption">// Frame_03.raw</div>
           </div>
-
         </div>
-      <
+      </div>
+    </div>
+
+    <!-- SEKME 4: TERMINAL -->
+    <div id="tab-terminal" class="tab-content">
+      <div class="card">
+        <h2 class="card-title">💻 Interaktif Terminal Lab</h2>
+        <p style="color: var(--text-sub); font-size: 0.85rem; margin-bottom: 15px;">Komut listesini görmek için <b style="color: var(--accent-purple);">help</b> yazıp Enter'a bas.</p>
+        
+        <div class="terminal">
+          <div class="terminal-header">
+            <span>bash - nur@NurOS:~</span>
+            <span>v4.0.26</span>
+          </div>
+          <div class="terminal-output" id="term-out">
+            NurOS Geliştirici Kabuğuna Hoş Geldin.<br>
+            Komut listesini görmek için 'help' yazabilirsin.<br><br>
+          </div>
+          <div class="terminal-input-row">
+            <span style="color: var(--accent-purple); font-weight: bold;">$</span>
+            <input type="text" class="terminal-input" id="term-in" placeholder="komut yaz..." autocomplete="off">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
