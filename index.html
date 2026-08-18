@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NurOS v4.3 — Cyber Architecture</title>
+  <title>NurOS v4.1 — Cyber Architecture</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,20 +11,21 @@
   <!-- Matrix Arka Plan Canvas -->
   <canvas id="matrix-canvas"></canvas>
 
-  <!-- Müzik Motoru (Kendi GitHub Depondaki Dosya) -->
-  <audio id="bg-music" loop preload="auto">
-    <source src="sarki.mp3" type="audio/mpeg">
-  </audio>
+  <!-- Gizli YouTube Oynatıcı (Ayaşlı Rafet - Paşa Torunu) -->
+  <iframe id="youtube-player" width="0" height="0" 
+          src="https://www.youtube.com/embed/vs_XGW7xkgY?enablejsapi=1&autoplay=1&loop=1&playlist=vs_XGW7xkgY" 
+          frameborder="0" allow="autoplay" style="display:none;">
+  </iframe>
 
   <!-- SOL MENÜ -->
   <aside class="sidebar">
     <div>
-      <div class="brand">⚡ NurOS v4.3</div>
+      <div class="brand">⚡ NurOS v4.1</div>
       <ul class="menu">
-        <li class="menu-item active" id="btn-home"><span>🏠</span> // System Core</li>
-        <li class="menu-item" id="btn-skills"><span>📊</span> // Dev Stack</li>
-        <li class="menu-item" id="btn-gallery"><span>🖼️</span> // Data Vault</li>
-        <li class="menu-item" id="btn-terminal"><span>💻</span> // Terminal Lab</li>
+        <li class="menu-item active" id="btn-home">🏠 // System Core</li>
+        <li class="menu-item" id="btn-skills">📊 // Dev Stack & Code</li>
+        <li class="menu-item" id="btn-gallery">🖼️ // Data Vault (Galeri)</li>
+        <li class="menu-item" id="btn-terminal">💻 // Terminal Lab</li>
       </ul>
     </div>
 
@@ -38,7 +39,7 @@
   <!-- SAĞ İÇERİK BÖLÜMÜ -->
   <main class="main-content">
 
-    <!-- TAB 1: HOME -->
+    <!-- SEKME 1: HOME -->
     <div id="tab-home" class="tab-content active">
       <div class="card profile-header">
         <div class="profile-img-wrap">
@@ -47,7 +48,9 @@
         <div>
           <h1 class="title">System Administrator: Nur</h1>
           <p class="subtitle">Computer Science Student • Cybersecurity & Architecture</p>
-          <p class="quote-box">"Karmaşık kodların ardındaki kusursuz estetik; bu özel sistemin tüm altyapısı senin ilhamınla inşa edildi."</p>
+          <p class="quote-box">
+            "Karmaşık kodların ardındaki kusursuz estetik; bu özel sistemin tüm altyapısı senin ilhamınla inşa edildi."
+          </p>
         </div>
       </div>
 
@@ -59,92 +62,131 @@
             <div class="metric-val" id="cpu-val">12%</div>
           </div>
           <div class="metric-card">
-            <div class="metric-label">Memory</div>
-            <div class="metric-val">16 GB</div>
+            <div class="metric-label">Memory Allocated</div>
+            <div class="metric-val">16 GB / OK</div>
           </div>
           <div class="metric-card">
-            <div class="metric-label">Network</div>
+            <div class="metric-label">Network Latency</div>
             <div class="metric-val" style="color: var(--terminal-green);">0.1 ms</div>
           </div>
           <div class="metric-card">
-            <div class="metric-label">Aura</div>
+            <div class="metric-label">Aura Level</div>
             <div class="metric-val" style="color: #f43f5e;">MAX</div>
           </div>
         </div>
       </div>
 
       <div class="card">
-        <h2 class="card-title">🎵 Fon Müziği Kontrolü</h2>
+        <h2 class="card-title">🎵 Özel Fon Müziği</h2>
         <div class="player-card">
           <div style="font-size: 2.2rem;">🎙️</div>
           <div style="flex: 1;">
             <div style="font-weight: bold; color: #fff;">Ayaşlı Rafet — Paşa Torunu</div>
-            <div style="color: var(--text-sub); font-size: 0.85rem;">Yerel Sistem Ses Dosyası (sarki.mp3)</div>
+            <div style="color: var(--text-sub); font-size: 0.85rem;">YouTube Canlı Akış Servisi</div>
           </div>
-          <button class="btn-audio" id="music-btn">▶️ Müziği Başlat</button>
+          <button class="btn-audio" id="music-btn">🎶 Müziği Aç / Kapat</button>
         </div>
       </div>
     </div>
 
-    <!-- TAB 2: SKILLS -->
+    <!-- SEKME 2: SKILLS -->
     <div id="tab-skills" class="tab-content">
       <div class="card">
         <h2 class="card-title">⚙️ Dev Stack & Yetenek Barları</h2>
         <div class="skill-grid">
-          <div class="skill-badge"><span>🐍</span> Python</div>
-          <div class="skill-badge"><span>🛡️</span> Cyber Security</div>
-          <div class="skill-badge"><span>🐧</span> Linux</div>
-          <div class="skill-badge"><span>🗄️</span> SQL</div>
+          <div class="skill-badge"><span>🐍</span> Python / Algoritma Mimarisi</div>
+          <div class="skill-badge"><span>🛡️</span> Siber Güvenlik & Ağ Analizi</div>
+          <div class="skill-badge"><span>🐧</span> Linux Shell & Bash Scripting</div>
+          <div class="skill-badge"><span>🗄️</span> SQL & Veri Tabanı Mimarisi</div>
         </div>
+
         <div style="margin-top: 25px;">
           <div class="skill-bar-row">
-            <div class="skill-bar-info"><span>Algoritma Hakimiyeti</span><span>100%</span></div>
+            <div class="skill-bar-info"><span>Problem Çözme & Algoritma Hakimiyeti</span><span>100%</span></div>
             <div class="progress-bg"><div class="progress-fill" style="width: 100%;"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-info"><span>Cyber Security & Threat Analysis</span><span>98%</span></div>
+            <div class="progress-bg"><div class="progress-fill" style="width: 98%;"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-info"><span>Asillik & Aura Status (Neon Purple)</span><span>99.9%</span></div>
+            <div class="progress-bg"><div class="progress-fill" style="width: 99.9%;"></div></div>
           </div>
         </div>
       </div>
+
       <div class="card">
-        <h2 class="card-title">💻 Live Code Sandbox</h2>
+        <h2 class="card-title">💻 Live Code Sandbox (nur_core.py)</h2>
         <div class="editor-container">
-          <div class="editor-header"><span>script: nur_core.py</span> <button class="btn-run" id="btn-run-code">▶️ Çalıştır</button></div>
+          <div class="editor-header">
+            <span>script: nur_core.py</span>
+            <button class="btn-run" id="btn-run-code">▶️ Kodu Derle & Çalıştır</button>
+          </div>
           <div class="editor-body">
-            print("[SUCCESS] Nur için mimari aktif.")
+<span style="color:#c084fc;">import</span> system_core
+
+<span style="color:#c084fc;">class</span> <span style="color:#f43f5e;">NurSystem</span>:
+    <span style="color:#c084fc;">def</span> <span style="color:#60a5fa;">__init__</span>(self):
+        self.user = <span style="color:#34d399;">"Nur"</span>
+        self.status = <span style="color:#34d399;">"Unstoppable Genius"</span>
+        self.song = <span style="color:#34d399;">"Ayaşlı Rafet - Paşa Torunu"</span>
+
+    <span style="color:#c084fc;">def</span> <span style="color:#60a5fa;">execute</span>(self):
+        <span style="color:#c084fc;">return</span> f<span style="color:#34d399;">"[SUCCESS] System running for {self.user}. Mood: Paşa Torunu 🎶"</span>
+
+sys = NurSystem()
+print(sys.execute())
           </div>
           <div id="sandbox-out"></div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 3: GALLERY -->
+    <!-- SEKME 3: GALLERY -->
     <div id="tab-gallery" class="tab-content">
       <div class="card">
         <h2 class="card-title">🖼️ Data Vault (Sistem Dosyaları)</h2>
         <div class="gallery-grid">
-          <div class="gallery-card"><img src="resim1.jpg" alt="1" onerror="this.src='https://via.placeholder.com/300x400/581c87/c084fc?text=Frame_01'"></div>
-          <div class="gallery-card"><img src="resim2.jpg" alt="2" onerror="this.src='https://via.placeholder.com/300x400/581c87/c084fc?text=Frame_02'"></div>
-          <div class="gallery-card"><img src="resim3.jpg" alt="3" onerror="this.src='https://via.placeholder.com/300x400/581c87/c084fc?text=Frame_03'"></div>
+          <div class="gallery-card">
+            <img src="resim1.jpg" alt="1" onerror="this.src='https://via.placeholder.com/300x400/581c87/c084fc?text=Frame_01.raw'">
+            <div class="gallery-caption">// Frame_01.raw</div>
+          </div>
+          <div class="gallery-card">
+            <img src="resim2.jpg" alt="2" onerror="this.src='https://via.placeholder.com/300x400/581c87/c084fc?text=Frame_02.raw'">
+            <div class="gallery-caption">// Frame_02.raw</div>
+          </div>
+          <div class="gallery-card">
+            <img src="resim3.jpg" alt="3" onerror="this.src='https://via.placeholder.com/300x400/581c87/c084fc?text=Frame_03.raw'">
+            <div class="gallery-caption">// Frame_03.raw</div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 4: TERMINAL -->
+    <!-- SEKME 4: TERMINAL -->
     <div id="tab-terminal" class="tab-content">
       <div class="card">
         <h2 class="card-title">💻 Interaktif Terminal Lab</h2>
-        <p style="color: var(--text-sub); font-size: 0.85rem; margin-bottom: 12px;">Komut listesini görmek için <b style="color: var(--accent-purple);">help</b> yazıp Enter'a bas.</p>
+        <p style="color: var(--text-sub); font-size: 0.85rem; margin-bottom: 15px;">Komut listesini görmek için <b style="color: var(--accent-purple);">help</b> yazıp Enter'a bas.</p>
+        
         <div class="terminal">
-          <div class="terminal-header"><span>bash - nur@NurOS:~</span></div>
+          <div class="terminal-header">
+            <span>bash - nur@NurOS:~</span>
+            <span>v4.1.26</span>
+          </div>
           <div class="terminal-output" id="term-out">
-            NurOS Kabuğuna Hoş Geldin.<br>
-            Kullanılabilir komutları görmek için <b>help</b> yazabilirsin.<br><br>
+            NurOS Geliştirici Kabuğuna Hoş Geldin.<br>
+            Komut listesini görmek için 'help' yazabilirsin.<br><br>
           </div>
           <div class="terminal-input-row">
-            <span>$</span>
+            <span style="color: var(--accent-purple); font-weight: bold;">$</span>
             <input type="text" class="terminal-input" id="term-in" placeholder="komut yaz..." autocomplete="off">
           </div>
         </div>
       </div>
     </div>
+
   </main>
 
   <script src="script.js"></script>
