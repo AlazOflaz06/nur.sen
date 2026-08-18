@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // 1. MENÜ GEÇİŞ MOTORU
+  // 1. KESİNTİSİZ MENÜ GEÇİŞ MOTORU
   const menuButtons = {
     'btn-home': 'tab-home',
     'btn-skills': 'tab-skills',
@@ -12,18 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnElement = document.getElementById(btnId);
     if (btnElement) {
       btnElement.addEventListener('click', () => {
-        
-        // Bütün sekmeleri gizle
         document.querySelectorAll('.tab-content').forEach(tab => {
           tab.classList.remove('active');
         });
-
-        // Bütün butonların aktifliğini kaldır
         document.querySelectorAll('.menu-item').forEach(item => {
           item.classList.remove('active');
         });
 
-        // İlgili sekmeyi ve butonu aktif yap
         const targetTabId = menuButtons[btnId];
         const targetTab = document.getElementById(targetTabId);
         if (targetTab) {
@@ -34,46 +29,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 2. GELİŞMİŞ MÜZİK MOTORU (sarki.mp3 Uyumlu)
-  const music = document.getElementById('bg-music');
+  // 2. YOUTUBE FON MÜZİĞİ KONTROLÜ
+  const ytPlayer = document.getElementById('youtube-player');
   const musicBtn = document.getElementById('music-btn');
+  let isPlaying = true;
 
-  function playMusic() {
-    if (music) {
-      music.play().then(() => {
-        if (musicBtn) musicBtn.innerText = "⏸️ Müziği Durdur";
-      }).catch(err => {
-        console.log("Müzik başlatılamadı:", err);
-      });
-    }
+  if (musicBtn && ytPlayer) {
+    musicBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        ytPlayer.src = ""; // Sesi kapatır
+        musicBtn.innerText = "▶️ Müziği Başlat";
+        isPlaying = false;
+      } else {
+        ytPlayer.src = "https://www.youtube.com/embed/vs_XGW7xkgY?enablejsapi=1&autoplay=1&loop=1&playlist=vs_XGW7xkgY"; // Sesi tekrar açar
+        musicBtn.innerText = "⏸️ Müziği Durdur";
+        isPlaying = true;
+      }
+    });
   }
-
-  function toggleMusic() {
-    if (!music) return;
-
-    if (music.paused) {
-      music.play().then(() => {
-        if (musicBtn) musicBtn.innerText = "⏸️ Müziği Durdur";
-      }).catch(err => {
-        alert("Müzik dosyası okunamadı! Klasörde 'sarki.mp3' adında bir dosya olduğundan emin ol.");
-      });
-    } else {
-      music.pause();
-      if (musicBtn) musicBtn.innerText = "▶️ Müziği Başlat";
-    }
-  }
-
-  if (musicBtn) {
-    musicBtn.addEventListener('click', toggleMusic);
-  }
-
-  // Sayfada herhangi bir yere ilk tıklamada tarayıcı engelini aşıp müziği başlatır
-  document.addEventListener('click', function autoPlayOnce() {
-    if (music && music.paused) {
-      playMusic();
-    }
-    document.removeEventListener('click', autoPlayOnce);
-  });
 
   // 3. MATRIX ARKA PLAN EFEKTİ
   const canvas = document.getElementById('matrix-canvas');
@@ -108,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. CANLI METRİK VE UPTIME SİMÜLATÖRÜ
+  // 4. CANLI METRİK SİMÜLATÖRÜ
   let seconds = 0;
   setInterval(() => {
     seconds++;
@@ -131,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 6. INTERAKTİF TERMINAL LAB MOTORU
+  // 6. INTERAKTİF TERMINAL LAB
   const termInput = document.getElementById('term-in');
   const termOutput = document.getElementById('term-out');
 
@@ -160,12 +133,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         else if (cmd === 'sysinfo') {
           termOutput.innerHTML += `<pre style="color:#c084fc; font-size:0.8rem; line-height:1.2;">
- .---.      OS: NurOS v4.0 x86_64
+ .---.      OS: NurOS v4.1 x86_64
 /     \\     Kernel: Pure-Elegance-6.1
 |  NUR  |    Uptime: ${seconds}s
 \\     /     CPU: Genius Mind @ 5.0GHz
  '---'      Status: Top Tier Admin
-          </pre>`;
+        </pre>`;
         }
         else if (cmd === 'hack') {
           termOutput.innerHTML += `<span style="color:#34d399;">
@@ -194,4 +167,3 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 });
-    
