@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // 1. KESİNTİSİZ MENÜ GEÇİŞ MOTORU
+  // 1. MENÜ GEÇİŞ MOTORU
   const menuButtons = {
     'btn-home': 'tab-home',
     'btn-skills': 'tab-skills',
@@ -12,16 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnElement = document.getElementById(btnId);
     if (btnElement) {
       btnElement.addEventListener('click', () => {
-        // Tüm sekmeleri gizle
         document.querySelectorAll('.tab-content').forEach(tab => {
           tab.classList.remove('active');
         });
-        // Tüm butonların aktifliğini kaldır
         document.querySelectorAll('.menu-item').forEach(item => {
           item.classList.remove('active');
         });
 
-        // Hedef sekmeyi ve tıklanan butonu aktif yap
         const targetTabId = menuButtons[btnId];
         const targetTab = document.getElementById(targetTabId);
         if (targetTab) {
@@ -32,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 2. REKLAMSIZ MÜZİK OYNATMA MOTORU
+  // 2. MP3 MÜZİK OYNATICI MOTORU
   const music = document.getElementById('bg-music');
   const musicBtn = document.getElementById('music-btn');
 
@@ -43,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
       music.play().then(() => {
         if (musicBtn) musicBtn.innerText = "⏸️ Müziği Durdur";
       }).catch(err => {
-        console.log("Ses başlatılamadı:", err);
+        alert("sarki.mp3 dosyası okunurken hata oluştu. Lütfen dosyanın depona yüklendiğinden emin ol.");
       });
     } else {
       music.pause();
@@ -55,17 +52,16 @@ document.addEventListener('DOMContentLoaded', () => {
     musicBtn.addEventListener('click', toggleMusic);
   }
 
-  // Mobil cihazlarda/tarayıcılarda ekrana yapılan ilk dokunuşta sesi açar
+  // Sayfaya yapılan ilk tıklamada müziği otomatik başlatır
   document.addEventListener('click', function autoPlayOnce() {
     if (music && music.paused) {
       music.play().then(() => {
         if (musicBtn) musicBtn.innerText = "⏸️ Müziği Durdur";
       }).catch(() => {});
     }
-    document.removeEventListener('click', autoPlayOnce);
-  });
+  }, { once: true });
 
-  // 3. MATRIX ARKA PLAN EFEKTİ
+  // 3. MATRIX ARKA PLAN
   const canvas = document.getElementById('matrix-canvas');
   if (canvas) {
     const ctx = canvas.getContext('2d');
@@ -98,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. CANLI UPTIME VE METRİK SİMÜLATÖRÜ
+  // 4. METRİK VE UPTIME SİMÜLATÖRÜ
   let seconds = 0;
   setInterval(() => {
     seconds++;
@@ -121,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 6. INTERAKTİF TERMINAL LAB
+  // 6. INTERAKTİF TERMINAL LAB (HELP BÖLÜMÜ GERİ EKLENDİ)
   const termInput = document.getElementById('term-in');
   const termOutput = document.getElementById('term-out');
 
@@ -150,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         else if (cmd === 'sysinfo') {
           termOutput.innerHTML += `<pre style="color:#c084fc; font-size:0.8rem; line-height:1.2;">
- .---.      OS: NurOS v4.2 x86_64
+ .---.      OS: NurOS v4.3 x86_64
 /     \\     Kernel: Pure-Elegance-6.1
 |  NUR  |    Uptime: ${seconds}s
 \\     /     CPU: Genius Mind @ 5.0GHz
