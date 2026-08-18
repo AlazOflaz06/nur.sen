@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NurOS v4.0 — Cyber Architecture</title>
+  <title>NurOS v4.1 — Cyber Architecture</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,16 +11,16 @@
   <!-- Matrix Arka Plan Canvas -->
   <canvas id="matrix-canvas"></canvas>
 
-  <!-- Müzik Elemanı (Yerel Dosyadan Okur) -->
-  <audio id="bg-music" loop>
-  <source src="sarki.mp3" type="audio/mpeg">
-</audio>
-
+  <!-- Gizli YouTube Oynatıcı (Ayaşlı Rafet - Paşa Torunu) -->
+  <iframe id="youtube-player" width="0" height="0" 
+          src="https://www.youtube.com/embed/vs_XGW7xkgY?enablejsapi=1&autoplay=1&loop=1&playlist=vs_XGW7xkgY" 
+          frameborder="0" allow="autoplay" style="display:none;">
+  </iframe>
 
   <!-- SOL MENÜ -->
   <aside class="sidebar">
     <div>
-      <div class="brand">⚡ NurOS v4.0</div>
+      <div class="brand">⚡ NurOS v4.1</div>
       <ul class="menu">
         <li class="menu-item active" id="btn-home">🏠 // System Core</li>
         <li class="menu-item" id="btn-skills">📊 // Dev Stack & Code</li>
@@ -82,9 +82,9 @@
           <div style="font-size: 2.2rem;">🎙️</div>
           <div style="flex: 1;">
             <div style="font-weight: bold; color: #fff;">Ayaşlı Rafet — Paşa Torunu</div>
-            <div style="color: var(--text-sub); font-size: 0.85rem;">Sistem Özel Medya Çalma Listesi</div>
+            <div style="color: var(--text-sub); font-size: 0.85rem;">YouTube Canlı Akış Servisi</div>
           </div>
-          <button class="btn-audio" id="music-btn">▶️ Müziği Başlat / Durdur</button>
+          <button class="btn-audio" id="music-btn">🎶 Müziği Aç / Kapat</button>
         </div>
       </div>
     </div>
@@ -173,7 +173,7 @@ print(sys.execute())
         <div class="terminal">
           <div class="terminal-header">
             <span>bash - nur@NurOS:~</span>
-            <span>v4.0.26</span>
+            <span>v4.1.26</span>
           </div>
           <div class="terminal-output" id="term-out">
             NurOS Geliştirici Kabuğuna Hoş Geldin.<br>
