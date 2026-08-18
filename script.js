@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // 1. MENÜ GEÇİŞ MOTORU
+  // 1. KESİNTİSİZ MENÜ GEÇİŞ MOTORU
   const menuButtons = {
     'btn-home': 'tab-home',
     'btn-skills': 'tab-skills',
@@ -29,39 +29,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 2. MP3 MÜZİK OYNATICI MOTORU
-  const music = document.getElementById('bg-music');
+  // 2. YOUTUBE FON MÜZİĞİ KONTROLÜ
+  const ytPlayer = document.getElementById('youtube-player');
   const musicBtn = document.getElementById('music-btn');
+  let isPlaying = true;
 
-  function toggleMusic() {
-    if (!music) return;
-
-    if (music.paused) {
-      music.play().then(() => {
-        if (musicBtn) musicBtn.innerText = "⏸️ Müziği Durdur";
-      }).catch(err => {
-        alert("sarki.mp3 dosyası okunurken hata oluştu. Lütfen dosyanın depona yüklendiğinden emin ol.");
-      });
-    } else {
-      music.pause();
-      if (musicBtn) musicBtn.innerText = "▶️ Müziği Başlat";
-    }
+  if (musicBtn && ytPlayer) {
+    musicBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        ytPlayer.src = ""; // Sesi kapatır
+        musicBtn.innerText = "▶️ Müziği Başlat";
+        isPlaying = false;
+      } else {
+        ytPlayer.src = "https://www.youtube.com/embed/vs_XGW7xkgY?enablejsapi=1&autoplay=1&loop=1&playlist=vs_XGW7xkgY"; // Sesi tekrar açar
+        musicBtn.innerText = "⏸️ Müziği Durdur";
+        isPlaying = true;
+      }
+    });
   }
 
-  if (musicBtn) {
-    musicBtn.addEventListener('click', toggleMusic);
-  }
-
-  // Sayfaya yapılan ilk tıklamada müziği otomatik başlatır
-  document.addEventListener('click', function autoPlayOnce() {
-    if (music && music.paused) {
-      music.play().then(() => {
-        if (musicBtn) musicBtn.innerText = "⏸️ Müziği Durdur";
-      }).catch(() => {});
-    }
-  }, { once: true });
-
-  // 3. MATRIX ARKA PLAN
+  // 3. MATRIX ARKA PLAN EFEKTİ
   const canvas = document.getElementById('matrix-canvas');
   if (canvas) {
     const ctx = canvas.getContext('2d');
@@ -94,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. METRİK VE UPTIME SİMÜLATÖRÜ
+  // 4. CANLI METRİK SİMÜLATÖRÜ
   let seconds = 0;
   setInterval(() => {
     seconds++;
@@ -117,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 6. INTERAKTİF TERMINAL LAB (HELP BÖLÜMÜ GERİ EKLENDİ)
+  // 6. INTERAKTİF TERMINAL LAB
   const termInput = document.getElementById('term-in');
   const termOutput = document.getElementById('term-out');
 
@@ -146,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         else if (cmd === 'sysinfo') {
           termOutput.innerHTML += `<pre style="color:#c084fc; font-size:0.8rem; line-height:1.2;">
- .---.      OS: NurOS v4.3 x86_64
+ .---.      OS: NurOS v4.1 x86_64
 /     \\     Kernel: Pure-Elegance-6.1
 |  NUR  |    Uptime: ${seconds}s
 \\     /     CPU: Genius Mind @ 5.0GHz
